@@ -2,6 +2,21 @@
 # ==================================================
 run "echo Added gem file"
 
+gem_group :development do
+  gem "rspec-rails"
+  gem "rails-erd"
+end
+
+gem_group :test do
+  gem 'simplecov', :require => false
+  gem 'simplecov-rcov', :require => false
+end
+
+# Install spec_helper.rb
+# ==================================================
+run "./bin/rails g rspec:install"
+run "rm -rf test"
+
 if yes?("Whould you like to use carrierwave ?")
   gem 'carrierwave'
   gem 'rmagick', :require => false
@@ -22,24 +37,9 @@ if yes?("This app will be following up on both the smartphone and PC?")
   gem 'jpmobile'
 end
 
-gem_group :development do
-  gem "rspec-rails"
-  gem "rails-erd"
-end
-
-gem_group :test do
-  gem 'simplecov', :require => false
-  gem 'simplecov-rcov', :require => false
-end
-
-# Install spec_helper.rb
-# ==================================================
-run "./bin/rails g rspec:install"
-run "rm -rf test"
-
 # Setup settingslogic config
 # ==================================================
-run "cat << EOF >> config/settings.yml
+run "cat << EOF >> config/0_settings.yml
 defaults: &defaults
 
 development:

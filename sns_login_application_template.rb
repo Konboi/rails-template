@@ -2,22 +2,6 @@
 # ==================================================
 run "echo Added gem file"
 
-gem 'settingslogic'
-
-if yes?("Whould you like to use carrierwave ?")
-  gem 'carrierwave'
-  gem 'rmagick', :require => false
-end
-
-if yes?('Would you like to use cron?')
-  gem 'whenever'
-  run "bundle exec wheneverize"
-end
-
-if yes?("This app will be following up on both the smartphone and PC?")
-  gem 'jpmobile'
-end
-
 gem_group :development do
   gem "rspec-rails"
   gem "rails-erd"
@@ -32,6 +16,8 @@ end
 # ==================================================
 run "./bin/rails g rspec:install"
 run "rm -rf test"
+
+gem 'settingslogic'
 
 # Setup settingslogic config
 # ==================================================
@@ -55,6 +41,20 @@ class Settings < Settingslogic
   namespace Rails.env
 end
 EOF"
+
+if yes?("Whould you like to use carrierwave ?")
+  gem 'carrierwave'
+  gem 'rmagick', :require => false
+end
+
+if yes?('Would you like to use cron?')
+  gem 'whenever'
+  run "bundle exec wheneverize"
+end
+
+if yes?("This app will be following up on both the smartphone and PC?")
+  gem 'jpmobile'
+end
 
 # SNS config
 # ==================================================
@@ -189,6 +189,7 @@ production:
   host: < HOST >
 EOF"
 end
+
 # Set .gitignore
 # ==================================================
 run "ehco Set .gitignore"
