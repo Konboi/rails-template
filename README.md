@@ -6,7 +6,7 @@ I use these templates when use sns cooperate function
 
 * if you use facebook and twitter
 
-```bash
+```
 rails new #{app name} -m https://raw.github.com/Konboi/rails-template/master/sns_login_application_template.rb -d mysql
 ```
 
