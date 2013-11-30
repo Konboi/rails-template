@@ -6,11 +6,15 @@ I use these templates when use sns cooperate function
 
 * if you use facebook and twitter
 
-`rails new #{app name} -m https://raw.github.com/Konboi/rails-template/master/sns_login_application_template.rb -d mysql`
+```bash
+rails new #{app name} -m https://raw.github.com/Konboi/rails-template/master/sns_login_application_template.rb -d mysql
+```
 
 * if you use only facebook
 
-`rails new #{app name} -m https://raw.github.com/Konboi/rails-template/master/facebook_login_application_template.rb -d mysql`
+```
+rails new #{app name} -m https://raw.github.com/Konboi/rails-template/master/facebook_login_application_template.rb -d mysql
+```
 
 
 I prepare twitter login template and default application template
