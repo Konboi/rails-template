@@ -40,6 +40,7 @@ defaults: &defaults
 
 development:
   <<: *defaults
+  host: localhost:3000
 
 test:
   <<: *defaults
@@ -48,7 +49,7 @@ production:
   <<: *defaults
 EOF"
 
-run "cat << EOF >> config/initializers/settings.rb
+run "cat << EOF >> config/initializers/0_settings.rb
 class Settings < Settingslogic
   source \"\#{Rails.root\}/config/settings.yml\"
   namespace Rails.env
@@ -76,6 +77,7 @@ test:
     app_secret: <APP SECRET>
     callback: <APP CALLBACK>
 EOF"
+  run "cp config/sns.yml.sample config/sns.yml"
 
   # Added settings for koala
   # ===================================================
@@ -121,16 +123,17 @@ if yes?('Do you want to upload to Amazon S3 in the file?')
 
   run "cat << EOF >> config/initializers/carrierwave.rb
 if Rails.env.production? || Rails.env.staging?
+  CONFIG = YAML.load_file(Rails.root.to_s + \"/config/aws.yml\")[Rails.env]
   CarrierWave.configure do |config|
     config.storage = :fog
     config.fog_credentials = {
       :provider              => 'AWS',
-      :aws_access_key_id     => Settings.aws.access_key,
-      :aws_secret_access_key => Settings.aws.secret_key,
-      :region                => 'ap-northeast-1',
+      :aws_access_key_id     => CONFIG[\"access_key\"],
+      :aws_secret_access_key => CONFIG[\"secret_access_key\"],
+      :region                => CONFIG[\"region\"],
     }
-    config.fog_directory = Settings.aws.resource.bucket
-    config.asset_host = Settings.aws.resource.host
+    config.fog_directory = CONFIG[\"bucket\"]
+    config.asset_host    = CONFIG[\"host\"]
   end
 else
   CarrierWave.configure do |config|
@@ -138,6 +141,27 @@ else
     config.asset_host = Settings.host
   end
 end
+EOF"
+
+  run "cat << EOF >> config/aws.yml
+test:
+  access_key: < ACCESS_KEY >
+  secret_access_key: < SECRET ACCESS KEY >
+  bucket: < BUCKET >
+  region: < REGION >
+  host: < HOST >
+development:
+  access_key: < ACCESS_KEY >
+  secret_access_key: < SECRET ACCESS KEY >
+  bucket: < BUCKET >
+  region: < REGION >
+  host: < HOST >
+production:
+  access_key: < ACCESS_KEY >
+  secret_access_key: < SECRET ACCESS KEY >
+  bucket: < BUCKET >
+  region: < REGION >
+  host: < HOST >
 EOF"
 
 end
@@ -150,6 +174,8 @@ db/schema.rb
 vendor/bundle
 tmp
 coverage
+config/database.yml
+config/sns.yml
 EOF"
 
 # bundle install
