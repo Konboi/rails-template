@@ -39,7 +39,7 @@ end
 
 # Setup settingslogic config
 # ==================================================
-run "cat << EOF >> config/0_settings.yml
+run "cat << EOF >> config/settings.yml
 defaults: &defaults
 
 development:
@@ -53,7 +53,7 @@ production:
   <<: *defaults
 EOF"
 
-run "cat << EOF >> config/initializers/settings.rb
+run "cat << EOF >> config/initializers/0_settings.rb
 class Settings < Settingslogic
   source \"\#{Rails.root\}/config/settings.yml\"
   namespace Rails.env
